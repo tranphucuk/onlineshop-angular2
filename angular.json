@@ -24,6 +24,11 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/animate.css/animate.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/nprogress/nprogress.css",
+              "src/assets/css/custom.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -119,6 +124,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "onlineshop-admin-angular2"
 }
