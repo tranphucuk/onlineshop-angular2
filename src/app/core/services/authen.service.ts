@@ -12,12 +12,12 @@ export class AuthenService {
   constructor(private http: Http) { }
 
   login(username: string, password: string) {
-    let body = 'username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&grant_type=password';
+    let body = 'userName=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&grant_type=password';
     let header = new Headers();
-    header.append('Content-Type', 'application/x-www-form-urlencoded');
+    header.append("Content-Type", "application/x-www-form-urlencoded");
     let options = new RequestOptions({ headers: header });
 
-    return this.http.post(systemConstants.BASE_API + '/api/oauth/tokenapi', body, options).pipe(map((response: Response) => {
+    return this.http.post(systemConstants.BASE_API + '/api/oauth/token', body, options).pipe(map((response: Response) => {
       let user: LoggedinUser = response.json();
       if (user.access_token && user) {
         localStorage.removeItem(systemConstants.CURRENT_USER);

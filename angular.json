@@ -29,8 +29,8 @@
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/nprogress/nprogress.css",
               "src/assets/css/custom.css",
-              "node_modules/alertify/build/css/alertify.css",
-              "node_modules/alertify/build/css/themes/default.css"
+              "node_modules/alertifyjs/build/css/alertify.css",
+              "node_modules/alertifyjs/build/css/themes/default.css"
 
             ],
             "scripts": [
@@ -38,7 +38,7 @@
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/fastclick/lib/fastclick.js",
               "node_modules/nprogress/nprogress.js",
-              "node_modules/alertify/build/alertify.js"
+              "node_modules/alertifyjs/build/alertify.js"
 
             ]
           },
