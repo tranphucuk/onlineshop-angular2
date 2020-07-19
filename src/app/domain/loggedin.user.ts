@@ -1,6 +1,10 @@
 export class LoggedinUser {
     constructor(access_token: string, username: string, fullName: string, email: string, avatar: string) {
         this.access_token = access_token;
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.avatar = avatar;
     }
 
     public id: string;

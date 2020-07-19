@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { systemConstants } from '../../core/services/common/system.constant';
-import { map } from 'rxjs/operators';``
+import { map } from 'rxjs/operators'; ``
 import { LoggedinUser } from '../../domain/loggedin.user';
 
 @Injectable({
@@ -33,9 +33,9 @@ export class AuthenService {
   isAuthenticated(): boolean {
     let user = localStorage.getItem(systemConstants.CURRENT_USER);
     if (user == null) {
-      return true;
-    } else {
       return false;
+    } else {
+      return true;
     }
   }
 
@@ -43,7 +43,7 @@ export class AuthenService {
     let user: LoggedinUser;
     if (this.isAuthenticated()) {
       var userJson = JSON.parse(localStorage.getItem(systemConstants.CURRENT_USER));
-       user = new LoggedinUser(userJson.access_token, userJson.username, userJson.fullName, userJson.email, userJson.avatar);
+      user = new LoggedinUser(userJson.access_token, userJson.username, userJson.fullName, userJson.email, userJson.avatar);
     } else {
       user = null;
     }
