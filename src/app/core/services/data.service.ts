@@ -15,35 +15,39 @@ import { MessageConstants } from '../../core/services/common/message.constant';
 export class DataService {
   private headers: Headers;
   constructor(private _http: Http, private _router: Router, private _authenService: AuthenService, private _notificationService: NotificationService,
-    private _utilityService: UtilityService, private _messageConstant: MessageConstants) { }
+    private _utilityService: UtilityService, private _messageConstant: MessageConstants) {
+
+    this.headers = new Headers();
+    this.headers.append('Contet-Type', 'application/json');
+  }
 
   get(uri: string) {
     this.headers.delete('Authorization');
-    this.headers.append('Authorization', 'Bearer' + this._authenService.getLoggedInUser().access_token);
+    this.headers.append('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().access_token);
     return this._http.get(systemConstants.BASE_API + uri, { headers: this.headers }).pipe(map(this.extractData));
   }
 
   post(uri: string, data?: any) {
     this.headers.delete('Authorization');
-    this.headers.append('Authorization', 'Bearer' + this._authenService.getLoggedInUser().access_token);
+    this.headers.append('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().access_token);
     return this._http.post(systemConstants.BASE_API + uri, data, { headers: this.headers }).pipe(map(this.extractData));
   }
 
   put(uri: string, data?: any) {
     this.headers.delete('Authorization');
-    this.headers.append('Authorization', 'Bearer' + this._authenService.getLoggedInUser().access_token);
+    this.headers.append('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().access_token);
     return this._http.put(systemConstants.BASE_API + uri, data, { headers: this.headers }).pipe(map(this.extractData));
   }
 
   delete(uri: string, key: string, id: string) {
     this.headers.delete('Authorization');
-    this.headers.append('Authorization', 'Bearer' + this._authenService.getLoggedInUser().access_token);
+    this.headers.append('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().access_token);
     return this._http.delete(systemConstants.BASE_API + uri + '/?' + key + '=' + id, { headers: this.headers }).pipe(map(this.extractData));;
   }
 
   postFile(uri: string, data?: any) {
     let newHeader = new Headers();
-    newHeader.append('Authorization', 'Bearer' + this._authenService.getLoggedInUser().access_token);
+    newHeader.append('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().access_token);
     return this._http.post(systemConstants.BASE_API + uri, data, { headers: newHeader }).pipe(map(this.extractData));
   }
 
