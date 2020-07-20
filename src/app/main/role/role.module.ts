@@ -4,6 +4,7 @@ import { RoleComponent } from './role.component';
 import { Routes, RouterModule } from '@angular/router'
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import {FormsModule} from '@angular/forms'
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 const roleRoutes: Routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -18,7 +19,8 @@ const roleRoutes: Routes = [
     RouterModule.forChild(roleRoutes),
     PaginationModule,
     PaginationModule.forRoot(),
-    FormsModule
+    FormsModule,
+    ModalModule.forRoot()
   ]
 })
 export class RoleModule { }

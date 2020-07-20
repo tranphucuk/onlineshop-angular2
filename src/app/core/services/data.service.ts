@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/observable';
 import { NotificationService } from '../../core/services/notification.service';
 import { UtilityService } from '../../core/services/utility.service';
 import { MessageConstants } from '../../core/services/common/message.constant';
+import { urlConstants } from './common/url.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class DataService {
     private _utilityService: UtilityService, private _messageConstant: MessageConstants) {
 
     this.headers = new Headers();
-    this.headers.append('Contet-Type', 'application/json');
+    this.headers.append('Content-Type', 'application/json');
   }
 
   get(uri: string) {
@@ -56,5 +57,16 @@ export class DataService {
     return body || {};
   }
 
-  // public handleError(error: any)
+  public handleError(error: any) {
+    if (error.status == 401) {
+      localStorage.removeItem(systemConstants.CURRENT_USER);
+      this._notificationService.printErrorMessage(MessageConstants.LOGIN_AGAIN_MESSAGE);
+      this._utilityService.navigateToLogin();
+    } else {
+      let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'System error.';
+      this._notificationService.printErrorMessage(errMsg);
+
+      return Observable.throw(errMsg);
+    }
+  }
 }
