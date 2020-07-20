@@ -61,7 +61,12 @@
             </tr>
           </tbody>
         </table>
-
+        <div class="row">
+            <div class="col-xs-12 col-12">
+              <pagination class="pagination-sm" [boundaryLinks]="true" (pageChanged)="pageChanged($event)" [itemsPerPage]='pageSize' [totalItems]='totalRow' [(ngModel)]='pageIndex'
+              previousText='&lsaquo;' nextText='&rsaquo;' firstText='&laquo;' lastText='&raquo;'></pagination>
+            </div>
+          </div>
       </div>
     </div>
   </div>
