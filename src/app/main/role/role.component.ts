@@ -60,6 +60,19 @@ export class RoleComponent implements OnInit {
     this.roleModal.show();
   }
 
+  DeleteRole(id: any) {
+    this.notifyServ.printConfirmDialog(MessageConstants.CONFIRM_DELETE_MSG, () => {
+      this.DeleteRoleConfirmed(id);
+    });
+  }
+
+  DeleteRoleConfirmed(id: any) {
+    this.dataSer.delete('/api/appRole/delete', 'id', id).subscribe((res: any) => {
+      this.notifyServ.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
+      this.loadData();
+    });
+  }
+
   SaveChange(valid: boolean) {
     if (valid) {
       if (this.entity.Id == undefined || this.entity.Id == '') {
