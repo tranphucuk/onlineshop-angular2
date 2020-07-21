@@ -47,6 +47,19 @@ export class RoleComponent implements OnInit {
     this.roleModal.show();
   }
 
+  GetRoleDetails(id: any) {
+    this.dataSer.get('/api/appRole/detail/' + id).subscribe((res: any) => {
+      this.entity = res;
+    }, error => {
+      this.dataSer.handleError(error);
+    });
+  }
+
+  ShowUpdateRole(id: any) {
+    this.GetRoleDetails(id);
+    this.roleModal.show();
+  }
+
   SaveChange(valid: boolean) {
     if (valid) {
       if (this.entity.Id == undefined || this.entity.Id == '') {
@@ -58,7 +71,13 @@ export class RoleComponent implements OnInit {
           this.dataSer.handleError(error);
         });
       } else {
-
+        this.dataSer.put('/api/appRole/update', JSON.stringify(this.entity)).subscribe((res: any) => {
+          this.roleModal.hide();
+          this.loadData();
+          this.notifyServ.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
+        }, error => {
+          this.dataSer.handleError(error);
+        });
       }
     }
   }
