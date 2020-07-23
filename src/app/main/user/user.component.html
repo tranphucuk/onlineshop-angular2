@@ -1,1 +1,232 @@
-<p>user works!</p>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Tables Users<small></small></h3>
+    </div>
+
+    <div class="title_right">
+        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+                <input type="text" class="form-control" name='filter' (keyup.enter)='loadData()' [(ngModel)]='filter'
+                    placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" (click)='loadData()' type="button">Go!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <button class="btn btn-primary pull-right" (click)=ShowModalUser()>New User</button>
+    <div class="x_panel">
+        <div class="x_title">
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
+                            class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Fullname</th>
+                        <th>Email</th>
+                        <th>Birthday</th>
+                        <th>Avatar</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let user of users'>
+                        <th scope="row">{{user.Id}}}</th>
+                        <td>{{user.UserName}}</td>
+                        <td>{{user.FullName}}</td>
+                        <td>{{user.Email}}</td>
+                        <td>{{user.BirthDay|date:'dd/MM/yyyy'}}</td>
+                        <td><img [src]='user.Avatar' width="30" height="30" /></td>
+                        <td>
+                            <button class="btn btn-primary" (click)='GetUserDetail(user.Id)'><i class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div class="row">
+                <div class="col-xs-12 col-12">
+                    <pagination class="pagination-sm" [boundaryLinks]="true" (pageChanged)="pageChanged($event)"
+                        [itemsPerPage]='pageSize' [totalItems]='totalRow' [(ngModel)]='pageIndex'
+                        previousText='&lsaquo;' nextText='&rsaquo;' firstText='&laquo;' lastText='&raquo;'></pagination>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<!--Modal add/edit user-->
+<div bsModal #AddEditUser="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="dialog-sizes-name1" class="modal-title pull-left">Add/Edit User</h4>
+                <button type="button" class="close pull-right" (click)="AddEditUser.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="demo-form2" novalidate #addEditUser='ngForm' (ngSubmit)='SaveChange(addEditUser.valid)' *ngIf='entity' data-parsley-validate
+                    class="form-horizontal form-label-left">
+                    <input type="hidden" [(ngModel)]='entity.Id' name="id">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="full-name">Full name <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #fullname='ngModel' [(ngModel)]='entity.FullName' required="required"
+                                minlength="3" maxlength="20" name="fullname" class="form-control col-md-7 col-xs-12">
+                            <small [hidden]='fullname.valid ||(fullname.pristine && !addEditUser.submitted)'
+                                class="text-danger">Fullname is required more than 3 words</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Username <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #username='ngModel' [(ngModel)]='entity.UserName' required="required"
+                                minlength="3" maxlength="20" name="username" class="form-control col-md-7 col-xs-12">
+                            <small [hidden]='username.valid ||(username.pristine && !addEditUser.submitted)'
+                                class="text-danger">Username must be over 3 words</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="email" #email='ngModel' [(ngModel)]='entity.Email' required="required"
+                                minlength="3" maxlength="30" email='true' name="email"
+                                class="form-control col-md-7 col-xs-12">
+                            <small [hidden]='email.valid ||(email.pristine && !addEditUser.submitted)'
+                                class="text-danger">Email is not valid</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group" *ngIf='!entity.Id'>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Password <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="password" #password='ngModel' [(ngModel)]='entity.Password' required="required"
+                                minlength="3" maxlength="20" name="password" class="form-control col-md-7 col-xs-12">
+                            <small [hidden]='password.valid ||(password.pristine && !addEditUser.submitted)'
+                                class="text-danger">Please enter valid description content</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group" *ngIf='!entity.Id'>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Confirm-Password <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="password" #confirmpassword='ngModel' [(ngModel)]='entity.ConfirmPassword'
+                                validateEqual='password' required="required" name="confirmpassword"
+                                class="form-control col-md-7 col-xs-12">
+                            <small
+                                [hidden]='confirmpassword.valid ||(confirmpassword.pristine && !addEditUser.submitted)'
+                                class="text-danger">Confirm-password and Password not matched</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Address <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #address='ngModel' [(ngModel)]='entity.Address' required="required"
+                                minlength="3" maxlength="20" name="address" class="form-control col-md-7 col-xs-12">
+                            <small [hidden]='address.valid ||(address.pristine && !addEditUser.submitted)'
+                                class="text-danger">Address must be over 3 words</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="avatar">Avatar <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-96 col-sm-6 col-xs-12">
+                            <input type="file" #avatar name='avatar' class="form-control" />
+                            <p class="help-block label label-danger"> Only support image type *.jpg, *.png, *.jpeg</p>
+                            <input type="hidden" [(ngModel)]='entity.Avatar' name="avatar.Url" />                        
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-12" *ngIf='entity.Avatar'>
+                            <img [src]='entity.Avatar' width="128" />
+                        </div>
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Birthday</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #birthday="ngModel" daterangepicker [options]="dateOptions"
+                                [(ngModel)]="entity.BirthDay" (selected)="selectedDate($event,picker)" name="birthday" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender<span
+                            class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="radio" (change)='selectGender($event)' #gender='ngModel'
+                                [checked]="entity.Gender=='True'" name="gender" [(ngModel)]='entity.Gender' value="True"
+                                required />Male
+                            <input type="radio" (change)='selectGender($event)' #gender='ngModel'
+                                [checked]="entity.Gender=='False'" name="gender" [(ngModel)]='entity.Gender'
+                                value="False" required />Female
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="avatar">Roles <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" (ngModelChange)="onChange($event)" [options]="allRoles"
+                                [(ngModel)]="myRoles"></ss-multiselect-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button class="btn btn-primary" type="button" (click)='AddEditUser.hide()'>Cancel</button>
+                            <button type="submit" [disabled]='!addEditUser.form.valid'
+                                class="btn btn-success" >Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
