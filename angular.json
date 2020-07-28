@@ -31,7 +31,8 @@
               "src/assets/css/custom.css",
               "node_modules/alertifyjs/build/css/alertify.css",
               "node_modules/alertifyjs/build/css/themes/default.css",
-              "node_modules/ng2-daterangepicker/assets/daterangepicker.css"
+              "node_modules/ng2-daterangepicker/assets/daterangepicker.css",
+              "node_modules/@circlon/angular-tree-component/src/lib/angular-tree-component.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

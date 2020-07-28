@@ -11,6 +11,7 @@ import { HttpModule } from '@angular/http'
 import { RoleModule } from './role/role.module';
 import { DataService } from '../core/services/data.service';
 import {MessageConstants} from '../core/services/common/message.constant';
+import {FunctionModule} from '../../app/main/function/function.module'
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import {MessageConstants} from '../core/services/common/message.constant';
     HomeModule,
     HttpModule,
     RoleModule,
+    FunctionModule,
     RouterModule.forChild(mainRoutes)
   ]
 })

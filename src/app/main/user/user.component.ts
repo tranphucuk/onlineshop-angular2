@@ -4,8 +4,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import { throwError } from 'rxjs';
 import { NotificationService } from '../../core/services/notification.service';
+import { UploadService } from '../../core/services/upload.service';
 import { MessageConstants } from '../../core/services/common/message.constant';
 import { systemConstants } from '../../core/services/common/system.constant';
+
 declare var moment: any;
 
 @Component({
@@ -25,7 +27,8 @@ export class UserComponent implements OnInit {
   public dob: any;
 
   @ViewChild('AddEditUser', { static: false }) userModal: ModalDirective;
-  constructor(private dataSer: DataService, private notifySer: NotificationService) { }
+  @ViewChild('avatar') avatar;
+  constructor(private dataSer: DataService, private notifySer: NotificationService, private uploadSer: UploadService) { }
 
   public dateOptions: any = {
     locale: { format: 'YYYY-MM-DD' },
@@ -85,27 +88,40 @@ export class UserComponent implements OnInit {
     this.dob = new Date(event.start._d).toDateString();
   }
 
+  SaveData() {
+    this.entity.Roles = this.myRoles;
+    this.entity.BirthDay = moment(new Date(this.dob)).format('DD/MM/YYYY');
+    if (this.entity.Id == undefined || this.entity.Id == '') {
+      this.dataSer.post('/api/appUser/add', this.entity).subscribe((res: any) => {
+        this.userModal.hide();
+        this.notifySer.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
+        this.loadData();
+      }, error => {
+        this.dataSer.handleError(error);
+      });
+    } else {
+      // this.entity.Roles = this.myRoles;
+      this.dataSer.put('/api/appUser/update', this.entity).subscribe((res: any) => {
+        this.userModal.hide();
+        this.notifySer.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
+        this.loadData();
+      }, error => {
+        this.dataSer.handleError(error);
+      });
+    }
+  }
+
   SaveChange(valid: boolean) {
     if (valid) {
-      this.entity.Roles = this.myRoles;
-      this.entity.BirthDay = moment(new Date(this.dob)).format('DD/MM/YYYY');
-      if (this.entity.Id == undefined || this.entity.Id == '') {
-        this.dataSer.post('/api/appUser/add', this.entity).subscribe((res: any) => {
-          this.userModal.hide();
-          this.notifySer.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
-          this.loadData();
-        }, error => {
-          this.dataSer.handleError(error);
+      let fi = this.avatar.nativeElement;
+      if (fi.files.length > 0) {
+        this.uploadSer.postWithFile('/api/upload/SaveImage', null, fi.files).then((imgUrl: string) => {
+          this.entity.Avatar = imgUrl;
+        }).then(() => {
+          this.SaveData();
         });
       } else {
-        // this.entity.Roles = this.myRoles;
-        this.dataSer.put('/api/appUser/update', this.entity).subscribe((res: any) => {
-          this.userModal.hide();
-          this.notifySer.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
-          this.loadData();
-        }, error => {
-          this.dataSer.handleError(error);
-        });
+        this.SaveData();
       }
     }
   }

@@ -6,6 +6,7 @@ import {FormsModule} from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import {UploadService} from '../../core/services/upload.service'
 
 
 const userRoutes: Routes=[
@@ -15,6 +16,7 @@ const userRoutes: Routes=[
 
 @NgModule({
   declarations: [UserComponent],
+  providers: [UploadService],
   imports: [
     CommonModule,
     FormsModule,

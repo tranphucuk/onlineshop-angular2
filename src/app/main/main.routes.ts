@@ -9,6 +9,8 @@ export const mainRoutes: Routes =[
         // {path:'home', component:HomeComponent},
         {path:'home',loadChildren:'./home/home.module#HomeModule'},
         {path:'user',loadChildren:'./user/user.module#UserModule'},
-        {path:'role', loadChildren:'./role/role.module#RoleModule'}
+        {path:'role', loadChildren:'./role/role.module#RoleModule'},
+        {path:'function', loadChildren:'./function/function.module#FunctionModule'}
+
     ]}
 ]
