@@ -19,7 +19,8 @@
 <div class="clearfix"></div>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
-    <button class="btn btn-primary pull-right" (click)=ShowModalUser()>New User</button>
+    <button class="btn btn-primary pull-right" *ngIf='authenSer.CheckPermission("USER", "create")'
+        (click)=ShowModalUser()>New User</button>
     <div class="x_panel">
         <div class="x_title">
             <ul class="nav navbar-right panel_toolbox">
@@ -63,8 +64,10 @@
                         <td>{{user.BirthDay|date:'dd/MM/yyyy'}}</td>
                         <td><img [src]='user.Avatar' width="30" height="30" /></td>
                         <td>
-                            <button class="btn btn-primary" (click)='GetUserDetail(user.Id)'><i class="fa fa-pencil-square-o"></i></button>
-                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-primary" *ngIf='authenSer.CheckPermission("USER", "update")'
+                                (click)='GetUserDetail(user.Id)'><i class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-danger" *ngIf='authenSer.CheckPermission("USER", "delete")'><i
+                                    class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -92,8 +95,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="demo-form2" novalidate #addEditUser='ngForm' (ngSubmit)='SaveChange(addEditUser.valid)' *ngIf='entity' data-parsley-validate
-                    class="form-horizontal form-label-left">
+                <form id="demo-form2" novalidate #addEditUser='ngForm' (ngSubmit)='SaveChange(addEditUser.valid)'
+                    *ngIf='entity' data-parsley-validate class="form-horizontal form-label-left">
                     <input type="hidden" [(ngModel)]='entity.Id' name="id">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="full-name">Full name <span
@@ -177,25 +180,26 @@
                         <div class="col-md-96 col-sm-6 col-xs-12">
                             <input type="file" #avatar name='avatar' class="form-control" />
                             <p class="help-block label label-danger"> Only support image type *.jpg, *.png, *.jpeg</p>
-                            <input type="hidden" [(ngModel)]='entity.Avatar' name="avatar.Url" />                        
+                            <input type="hidden" [(ngModel)]='entity.Avatar' name="avatar.Url" />
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-12" *ngIf='entity.Avatar'>
                             <img [src]='entity.Avatar' width="128" />
                         </div>
-                        
+
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Birthday</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="text" #birthday="ngModel" daterangepicker [options]="dateOptions"
-                                [(ngModel)]="entity.BirthDay" (selected)="selectedDate($event,picker)" name="birthday" class="form-control">
+                                [(ngModel)]="entity.BirthDay" (selected)="selectedDate($event,picker)" name="birthday"
+                                class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender<span
-                            class="required">*</span></label>
+                                class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="radio" (change)='selectGender($event)' #gender='ngModel'
                                 [checked]="entity.Gender=='True'" name="gender" [(ngModel)]='entity.Gender' value="True"
@@ -211,8 +215,9 @@
                                 class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" (ngModelChange)="onChange($event)" [options]="allRoles"
-                                [(ngModel)]="myRoles"></ss-multiselect-dropdown>
+                            <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}"
+                                (ngModelChange)="onChange($event)" [options]="allRoles" [(ngModel)]="myRoles">
+                            </ss-multiselect-dropdown>
                         </div>
                     </div>
 
@@ -221,7 +226,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <button class="btn btn-primary" type="button" (click)='AddEditUser.hide()'>Cancel</button>
                             <button type="submit" [disabled]='!addEditUser.form.valid'
-                                class="btn btn-success" >Submit</button>
+                                class="btn btn-success">Submit</button>
                         </div>
                     </div>
 

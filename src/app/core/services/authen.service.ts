@@ -43,10 +43,57 @@ export class AuthenService {
     let user: LoggedinUser;
     if (this.isAuthenticated()) {
       var userJson = JSON.parse(localStorage.getItem(systemConstants.CURRENT_USER));
-      user = new LoggedinUser(userJson.access_token, userJson.username, userJson.fullName, userJson.email, userJson.avatar);
+      user = new LoggedinUser(userJson.access_token, userJson.username,
+        userJson.fullName,
+        userJson.email,
+        userJson.avatar,
+        userJson.roles,
+        userJson.permissions);
     } else {
       user = null;
     }
     return user;
+  }
+
+  CanAccess(functionId: string) {
+    var user = this.getLoggedInUser();
+    var result: boolean = false;
+    var permissions: any[] = JSON.parse(user.permission);
+    var roles: any[] = JSON.parse(user.roles);
+    var hasPermissions: number = permissions.findIndex(x => x.FunctionId == functionId && x.CanRead == true);
+    if (hasPermissions != -1 || roles.findIndex(x => x == 'Admin') != -1)
+      return true;
+    else
+      return false;
+  }
+
+  CheckPermission(functionID: string, action: string): boolean {
+    var user = this.getLoggedInUser();
+    var permission: any[] = JSON.parse(user.permission);
+    var roles: any[] = JSON.parse(user.roles);
+    switch (action) {
+      case 'create':
+        var hasPermission: number = permission.findIndex(x => x.FunctionId = functionID && x.CanCreate == true)
+        if (hasPermission != -1 || roles.findIndex(x => x == 'Admin') != -1)
+          return true;
+        else
+          return false;
+
+      case 'update':
+        var hasPermission: number = permission.findIndex(x => x.FunctionId = functionID && x.CanUpdate == true)
+        if (hasPermission != -1 || roles.findIndex(x => x == 'Admin') != -1)
+          return true;
+        else
+          return false;
+
+      case 'delete':
+        var hasPermission: number = permission.findIndex(x => x.FunctionId = functionID && x.CanDelete == true)
+        if (hasPermission != -1 || roles.findIndex(x => x == 'Admin') != -1)
+          return true;
+        else
+          return false;
+      default:
+        break;
+    }
   }
 }

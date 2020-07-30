@@ -6,7 +6,8 @@ import { throwError } from 'rxjs';
 import { NotificationService } from '../../core/services/notification.service';
 import { UploadService } from '../../core/services/upload.service';
 import { MessageConstants } from '../../core/services/common/message.constant';
-import { systemConstants } from '../../core/services/common/system.constant';
+import { UtilityService } from '../../core/services/utility.service';
+import { AuthenService } from '../../core/services/authen.service'
 
 declare var moment: any;
 
@@ -28,7 +29,13 @@ export class UserComponent implements OnInit {
 
   @ViewChild('AddEditUser', { static: false }) userModal: ModalDirective;
   @ViewChild('avatar') avatar;
-  constructor(private dataSer: DataService, private notifySer: NotificationService, private uploadSer: UploadService) { }
+  constructor(private dataSer: DataService, private notifySer: NotificationService, public authenSer: AuthenService,
+    private uploadSer: UploadService, private utilitySer: UtilityService) {
+    if (this.authenSer.CanAccess('USER') == false) {
+      this.utilitySer.navigateToLogin();
+    }
+
+  }
 
   public dateOptions: any = {
     locale: { format: 'YYYY-MM-DD' },
