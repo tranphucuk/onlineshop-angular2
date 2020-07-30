@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { systemConstants } from '../core/services/common/system.constant';
-import {UtilityService}  from '../../app/core/services/utility.service';
-import {AuthenService} from '../core/services/authen.service';
-import {LoggedinUser} from '../domain/loggedin.user'
+import { UtilityService } from '../../app/core/services/utility.service';
+import { AuthenService } from '../core/services/authen.service';
+import { LoggedinUser } from '../domain/loggedin.user'
 
 @Component({
   selector: 'app-main',
@@ -17,7 +17,7 @@ export class MainComponent implements OnInit {
     this._user = this.authen.getLoggedInUser();
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem(systemConstants.CURRENT_USER);
     this.utilityService.navigateToLogin();
   }

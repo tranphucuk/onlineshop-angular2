@@ -12,10 +12,12 @@ import { RoleModule } from './role/role.module';
 import { DataService } from '../core/services/data.service';
 import {MessageConstants} from '../core/services/common/message.constant';
 import {FunctionModule} from '../../app/main/function/function.module'
+import {SidebarMenuComponent} from '../../app/shared/sidebar/sidebar-menu/sidebar-menu.component'
+import {TopbarMenuComponent} from '../shared/topbar/topbar-menu/topbar-menu.component'
 
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [MainComponent, SidebarMenuComponent, TopbarMenuComponent],
   providers: [UtilityService, AuthenService, DataService, MessageConstants],
   imports: [
     CommonModule,
