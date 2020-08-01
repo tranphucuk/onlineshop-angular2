@@ -14,7 +14,7 @@ import {MessageConstants} from '../core/services/common/message.constant';
 import {FunctionModule} from '../../app/main/function/function.module'
 import {SidebarMenuComponent} from '../../app/shared/sidebar/sidebar-menu/sidebar-menu.component'
 import {TopbarMenuComponent} from '../shared/topbar/topbar-menu/topbar-menu.component'
-
+import {ProductCategoryModule} from './product-category/product-category.module'
 
 @NgModule({
   declarations: [MainComponent, SidebarMenuComponent, TopbarMenuComponent],
@@ -26,6 +26,7 @@ import {TopbarMenuComponent} from '../shared/topbar/topbar-menu/topbar-menu.comp
     HttpModule,
     RoleModule,
     FunctionModule,
+    ProductCategoryModule,
     RouterModule.forChild(mainRoutes)
   ]
 })

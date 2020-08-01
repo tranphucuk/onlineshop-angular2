@@ -1,1 +1,186 @@
-<p>product-category works!</p>
+<div class="page-title">
+  <div class="title_left">
+    <h3>Category <small>list</small></h3>
+  </div>
+
+  <div class="title_right">
+    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div class="input-group">
+        <input type="text" class="form-control" name='filter' placeholder="Search for...">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">Go!</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+  <button class="btn btn-primary pull-right" (click)='ShowProductCateModal()'>New Product Category</button>
+  <div class="x_panel">
+    <div class="x_title">
+      <!-- <h2>Boardered table <small>Bordered table subtitle</small></h2> -->
+      <ul class="nav navbar-right panel_toolbox">
+        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
+              class="fa fa-wrench"></i></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Settings 1</a>
+            </li>
+            <li><a href="#">Settings 2</a>
+            </li>
+          </ul>
+        </li>
+        <li><a class="close-link"><i class="fa fa-close"></i></a>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+
+      <tree-root #treeCate [nodes]="child_categories">
+        <ng-template #treeNodeTemplate let-node let-index="index">
+          <span>{{ node.data.Name }}</span> &nbsp;
+          <button class="btn btn-xs btn-primary" (click)='GetCategoryDetail(node.data.ID)'><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+          <button class="btn btn-xs btn-danger" (click)='DeleteCategory(node.data.ID)'><i class="fa fa-trash" aria-hidden="true"></i></button>
+        </ng-template>
+      </tree-root>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!--Modal add/edit product category-->
+<div bsModal #AddEditProductCategory="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Add/Edit Product Category</h4>
+        <button type="button" class="close pull-right" (click)="AddEditProductCategory.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="demo-form2" novalidate #FrmProductCategory='ngForm' (ngSubmit)='SaveChange(FrmProductCategory.valid)' name="FrmProductCategory" *ngIf='entity'
+          novalidate data-parsley-validate class="form-horizontal form-label-left">
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Name">Name <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" required="required" [(ngModel)]='entity.Name' name="productCateName"
+                #productCateName='ngModel' minlength="2" maxlength="20" (keyup)='GenerateAlias(entity.Name)'
+                class="form-control col-md-7 col-xs-12">
+              <small [hidden]='productCateName.valid ||(productCateName.pristine && !FrmProductCategory.submitted)'
+                class="text-danger">Please enter name over 2 words</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Alias">Alias<span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" required="required" readonly="readonly" name="alias" [(ngModel)]='entity.Alias'
+                #alias='ngModel' class="form-control col-md-7 col-xs-12">
+              <small [hidden]='alias.valid ||(alias.pristine && !FrmProductCategory.submitted)'
+                class="text-danger">Alias is
+                required</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Description">Description<span
+                class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" required="required" name="description" [(ngModel)]='entity.Description'
+                #description='ngModel' minlength="2" class="form-control col-md-7 col-xs-12">
+              <small [hidden]='description.valid ||(description.pristine && !FrmProductCategory.submitted)'
+                class="text-danger">Please enter description over 2 words</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="MetaKeyword">Meta Keyword<span
+                class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" required="required" name="metakeyword" #metakeyword='ngModel'
+                [(ngModel)]='entity.MetaKeyword' minlength="2" maxlength="20" class="form-control col-md-7 col-xs-12">
+              <small [hidden]='metakeyword.valid ||(metakeyword.pristine && !FrmProductCategory.submitted)'
+                class="text-danger">Please enter name over 2 words</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="MetaDescription">Meta Description<span
+                class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" required="required" name="metadescription" #metadescription='ngModel'
+                [(ngModel)]='entity.MetaDescription' minlength="2" maxlength="20"
+                class="form-control col-md-7 col-xs-12">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Category">Category<span
+                class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <select class="form-control" name="parentId" [(ngModel)]='entity.ParentID' required #parentId='ngModel' required>
+                <option value="">--Category Parent--</option>
+                <option *ngFor='let cate of categories' [value]='cate.ID'>
+                  {{cate.Name}}
+                </option>
+              </select>
+              <input type="hidden" class="form-control" [(ngModel)]='entity.ParentID' name="parentId" #parentId='ngModel'>
+              <small *ngIf='parentId.touched && parentId.invalid' class="text-danger" >Please select category</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="DisplayOrder">Display Order<span
+                class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="number" required="required" [(ngModel)]='entity.DisplayOrder' name="displayorder" class="form-control col-md-7 col-xs-12">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="HomeOrder">Home Order<span
+                class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="number" required="required" [(ngModel)]='entity.HomeOrder' name="homorder" class="form-control col-md-7 col-xs-12">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Status">Status<span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="checkbox" [(ngModel)]='entity.Status' name="status">Active
+            </div>
+          </div>
+
+          <div class="ln_solid"></div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+              <button class="btn btn-primary" type="button" (click)='AddEditProductCategory.hide()'>Cancel</button>
+              <button type="submit" class="btn btn-success" [disabled]='!FrmProductCategory.form.valid'>Submit</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
