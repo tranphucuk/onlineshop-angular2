@@ -10,11 +10,12 @@ import { AuthenService } from '../core/services/authen.service';
 import { HttpModule } from '@angular/http'
 import { RoleModule } from './role/role.module';
 import { DataService } from '../core/services/data.service';
-import {MessageConstants} from '../core/services/common/message.constant';
-import {FunctionModule} from '../../app/main/function/function.module'
-import {SidebarMenuComponent} from '../../app/shared/sidebar/sidebar-menu/sidebar-menu.component'
-import {TopbarMenuComponent} from '../shared/topbar/topbar-menu/topbar-menu.component'
-import {ProductCategoryModule} from './product-category/product-category.module'
+import { MessageConstants } from '../core/services/common/message.constant';
+import { FunctionModule } from '../../app/main/function/function.module'
+import { SidebarMenuComponent } from '../../app/shared/sidebar/sidebar-menu/sidebar-menu.component'
+import { TopbarMenuComponent } from '../shared/topbar/topbar-menu/topbar-menu.component'
+import { ProductCategoryModule } from './product-category/product-category.module'
+import { ProductModule } from './product/product.module'
 
 @NgModule({
   declarations: [MainComponent, SidebarMenuComponent, TopbarMenuComponent],
@@ -27,7 +28,8 @@ import {ProductCategoryModule} from './product-category/product-category.module'
     RoleModule,
     FunctionModule,
     ProductCategoryModule,
-    RouterModule.forChild(mainRoutes)
+    ProductModule,
+    RouterModule.forChild(mainRoutes),
   ]
 })
 export class MainModule { }

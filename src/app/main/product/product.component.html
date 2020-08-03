@@ -1,1 +1,263 @@
-<p>product works!</p>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Tables Product<small></small></h3>
+    </div>
+
+    <div class="title_right">
+        <div class="col-md-3 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+                <input type="text" class="form-control" (keyup)='OnKeyup($event)' name='filter' [(ngModel)]='keyword' name="keyword" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" id="btnSearch" (click)='SearchProduct(keyword)' type="button">Go!</button>
+                </span>     
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-3 col-xs-12 form-group pull-right">
+            <select class="form-control" (change)="onSelectChange($event.target.value)">
+                <option>-- Product Category --</option>
+                <option *ngFor='let cate of categories' [value]="cate.ID">
+                    {{cate.Name}}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <button class="btn btn-primary pull-right" (click)='showAddEditModal()'>New Product</button>
+    <button class="btn btn-danger" type="button">Delete multiple product</button>
+    <div class="x_panel">
+        <div class="x_title">
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
+                            class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Original Price</th>
+                        <th>Image</th>
+                        <th>Created Date</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let product of products'>
+                        <th scope="row">{{product.ID}}</th>
+                        <td>{{product.Name}}</td>
+                        <td>{{product.ProductCategory.Name}}</td>
+                        <td>{{product.Price}}</td>
+                        <td>{{product.OriginalPrice}}</td>
+                        <td><img [src]='product.ThumbnailImage' width="30" height="30" /></td>
+                        <td>{{product.CreatedDate|date:'dd/MM/yyyy'}}</td>
+                        <td>
+                            <button class="btn btn-primary" (click)='GetProductDetail(product.ID)'><i class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-danger" (click)='DeleteProduct(product.ID)'><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-xs-12 col-12">
+                    <pagination class="pagination-sm" [boundaryLinks]="true" (pageChanged)="pageChanged($event)"
+                        [itemsPerPage]='pageSize' [totalItems]='totalRow' [(ngModel)]='pageIndex'
+                        previousText='&lsaquo;' nextText='&rsaquo;' firstText='&laquo;' lastText='&raquo;'></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal add/edit role-->
+<div bsModal #AddEditProduct="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Thêm mới / Chỉnh sửa</h4>
+                <button type="button" class="close pull-right" (click)="AddEditProduct.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="demo-form2" novalidate #FrmProduct='ngForm' (ngSubmit)='SaveChange(FrmProduct.valid)'
+                    data-parsley-validate class="form-horizontal form-label-left">
+                    <input type="hidden" [(ngModel)]="entity.ID" name="id" />
+                    <div role="tabpanel">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#general-info" aria-controls="uploadTab"
+                                    role="tab" data-toggle="tab">General</a></li>
+                            <li role="presentation"><a href="#content" aria-controls="browseTab" role="tab"
+                                    data-toggle="tab">Content</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <!--Base information about product-->
+                            <h4>General Information</h4>
+                            <div role="tabpanel" class="tab-pane active" id="general-info">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" (keyup)='GenerateAlias(entity.Name)' required minlength="2"
+                                            #productName='ngModel' [(ngModel)]='entity.Name' name="productName"
+                                            class="form-control" />
+                                        <small *ngIf='productName.invalid && !FrmProduct.submitted'
+                                            class="text-danger">Name length must be over 3 words</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Alias</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" [(ngModel)]='entity.Alias' name="alias" #alias='ngModel'
+                                            readonly class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control" [(ngModel)]='entity.CategoryID' name="cateID">
+                                            <option>-- Select Product Category --</option>
+                                            <option *ngFor='let cate of categories' [value]="cate.ID">
+                                                {{cate.Name}}
+                                            </option>
+                                            <!-- <input type="hidden" [(ngModel)]='entity.CategoryID' name="cateID"
+                                                    class="form-control"> -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="number" min="0" [(ngModel)]='entity.Price' name="price"
+                                            #price='ngModel' class="form-control" />
+                                        <small *ngIf='!price.valid && !FrmProduct.submitted' class="text-danger">Price
+                                            is invalid</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Original Price</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="number" [(ngModel)]='entity.OriginalPrice' name="originalPrice"
+                                            #origiPrice='ngModel' class="form-control" />
+                                        <small *ngIf='!origiPrice.valid  && !FrmProduct.submitted'
+                                            class="text-danger">Original Price is invalid</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Warranty</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="number" [(ngModel)]='entity.Warranty' name="warranty"
+                                            #warranty='ngModel' class="form-control" />
+                                        <small *ngIf='!warranty.valid && !FrmProduct.submitted'
+                                            class="text-danger">Warranty value is invalid</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Image">Image <span
+                                            class="required">*</span>
+                                    </label>
+                                    <div class="col-md-96 col-sm-6 col-xs-12">
+                                        <input type="file" #productImage name='productImage' class="form-control" />
+                                        <p class="help-block label label-danger"> Only support image type *.jpg, *.png,
+                                            *.jpeg</p>
+                                        <input type="hidden" [(ngModel)]='entity.ThumbnailImage'
+                                            name="productImage.Url" />
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12" *ngIf='entity.ThumbnailImage'>
+                                        <img [src]='entity.ThumbnailImage' width="128" />
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Meta Keyword</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" [(ngModel)]='entity.MetaKeyword' name="metakeyword"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Meta Description</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" [(ngModel)]='entity.MetaDescription' name="metadescription"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Tags</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" [(ngModel)]='entity.Tags' name="tags" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Included VAT</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="checkbox" [(ngModel)]='entity.IncludedVAT' name="vat" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Home Flag</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="checkbox" [(ngModel)]='entity.HomeFlag' name="homeFlag" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Hot Flag</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="checkbox" [(ngModel)]='entity.HotFlag' name="hotFlag" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Base information about product-->
+
+                            <div role="tabpanel" class="tab-pane" id="content">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary save" [disabled]='FrmProduct.form.invalid'>Save
+                            changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
