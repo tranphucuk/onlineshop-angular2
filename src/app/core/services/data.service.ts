@@ -46,6 +46,19 @@ export class DataService {
     return this._http.delete(systemConstants.BASE_API + uri + '/?' + key + '=' + id, { headers: this.headers }).pipe(map(this.extractData));;
   }
 
+
+  deleteWithMultiParams(uri: string, params) {
+    this.headers.delete('Authorization');
+
+    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+    var paramStr: string = '';
+    for (let param in params) {
+      paramStr += param + "=" + params[param] + '&';
+    }
+    return this._http.delete(systemConstants.BASE_API + uri + "/?" + paramStr, { headers: this.headers })
+      .pipe(map(this.extractData));
+  }
+
   postFile(uri: string, data?: any) {
     let newHeader = new Headers();
     newHeader.append('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().access_token);
@@ -60,6 +73,7 @@ export class DataService {
   //   }))
   // }
 
+
   extractData(res: Response) {
     let body = res.json();
     return body || {};
@@ -71,7 +85,7 @@ export class DataService {
       this._notificationService.printErrorMessage(MessageConstants.LOGIN_AGAIN_MESSAGE);
       this._utilityService.navigateToLogin();
     } else {
-      let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'System error.';
+      let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${JSON.parse(error._body).Message}` : error.statusText;
       this._notificationService.printErrorMessage(errMsg);
 
       return Observable.throw(errMsg);

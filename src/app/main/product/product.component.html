@@ -80,7 +80,8 @@
                         <td>
                             <button class="btn btn-default" (click)='ShowImageManage(product.ID)'><i
                                     class="fa fa-image"></i></button>
-                            <button class="btn btn-default"><i class="fa fa-calculator"></i></button>
+                            <button class="btn btn-default" (click)='ShowQuantityManage(product.ID)'><i
+                                    class="fa fa-calculator"></i></button>
                             <button class="btn btn-primary" (click)='GetProductDetail(product.ID)'><i
                                     class="fa fa-pencil-square-o"></i></button>
                             <button class="btn btn-danger" (click)='DeleteProduct(product.ID)'><i
@@ -337,6 +338,103 @@
                             <button (click)="ProductImageManager.hide()" class="btn btn-primary"
                                 type="button">Cancel</button>
                             <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Modal manage product quantity-->
+<div bsModal #ProductQuantityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="dialog-sizes-name1" class="modal-title pull-left">Product Quantity Manager</h4>
+                <button type="button" class="close pull-right" (click)="ProductQuantityModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frm-product-quantity" novalidate #FrmProductQuantity='ngForm' data-parsley-validate
+                    class="form-horizontal form-label-left">
+                    <!-- <input type="hidden" [(ngModel)]='UploadImage.ProductId' name="productid"> -->
+                    <div class="form-group">
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="first-name">Size <span
+                                class="required"></span>
+                        </label>
+                        <div class="col-md-3 col-sm-3 col-xs-4">
+                            <select class="form-control" required [(ngModel)]='_product_Quantity_entity.SizeId'
+                                #sizeId='ngModel' name="sizeId">
+                                <!-- <option value="">--Please select size--</option> -->
+                                <option [value]='size.ID' *ngFor='let size of _size_List'>{{size.Name}}</option>
+                            </select>
+                            <small [hidden]='sizeId.valid && !FrmProductQuantity.submitted' class="text-danger">Please
+                                select size</small>
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="last-name">Color <span
+                                class="required"></span>
+                        </label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                            <select class="form-control" required [(ngModel)]='_product_Quantity_entity.ColorId'
+                                #colorId='ngModel' name="colorId">
+                                <!-- <option value="" [selected]>--Please select color--</option> -->
+                                <option [value]='color.ID' *ngFor='let color of _color_List'>{{color.Name}}</option>
+                            </select>
+                            <small [hidden]='colorId.valid  && !FrmProductQuantity.submitted' class="text-danger">Please
+                                select color</small>
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="last-name">Quantity <span
+                                class="required"></span>
+                        </label>
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                            <input type="number" required min="0" [(ngModel)]='_product_Quantity_entity.Quantity'
+                                name="quantity" #quantity='ngModel' class="form-control col-md-7 col-xs-12">
+                            <small [hidden]='quantity.valid  && !FrmProductQuantity.submitted'
+                                class="text-danger">Please enter valid quantity number</small>
+                        </div>
+
+                        <div class="col-md-1 col-sm-1 col-xs-12">
+                            <button class="btn btn-primary" type="button" [disabled]='!FrmProductQuantity.valid'
+                                (click)='SaveProductQuantity(_product_Quantity_entity.SizeId,_product_Quantity_entity.ColorId)'>Add</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <table class="table table-bordered col-md-12 col-sm-12 col-xs-12">
+                            <thead>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Size</th>
+                                    <th>Colotr</th>
+                                    <th>Quantity</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor='let quantity of _product_Quantities'>
+                                    <td>{{quantity.ProductId}}</td>
+                                    <td>{{quantity.Size.Name}}</td>
+                                    <td>{{quantity.Color.Name}}</td>
+                                    <td>{{quantity.Quantity}}</td>
+                                    <td><button class="btn btn-danger"
+                                            (click)='DeleteQuantity(quantity.ProductId,quantity.Size.ID, quantity.Color.ID )'><i
+                                                class="fa fa-trash"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-9">
+                            <button (click)="ProductQuantityModal.hide()" class="btn btn-primary"
+                                type="button">Cancel</button>
                         </div>
                     </div>
                 </form>

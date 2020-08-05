@@ -38,6 +38,15 @@ export class ProductComponent implements AfterViewInit, OnInit {
     private utilitySer: UtilityService,
     private uploadSer: UploadService) { }
 
+  /*--------------------Product quantity variable-----------------------------*/
+  @ViewChild('ProductQuantityModal', { static: false }) product_quantity_modal: ModalDirective;
+  public _product_Quantity_entity: any;
+  public _product_Quantities: any[];
+  public _size_List: any[];
+  public _color_List: any[];
+  public _sizeID: any = '';
+  public _colorID: any = '';
+
   ngAfterViewInit() {
 
   }
@@ -47,6 +56,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
     this.LoadProducts();
     this.entity = {};
     this.UploadImage = {};
+    this._product_Quantity_entity = {};
   }
 
   showAddEditModal() {
@@ -166,7 +176,6 @@ export class ProductComponent implements AfterViewInit, OnInit {
   }
 
   // Product Image part
-
   ShowImageManage(id: any) {
     this.product_image_modal.show();
     this.UploadImage.ProductId = id;
@@ -198,7 +207,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
           })
         })
       } else {
-        
+
       }
     }
   }
@@ -212,5 +221,61 @@ export class ProductComponent implements AfterViewInit, OnInit {
         this.dataSer.handleError(err);
       })
     });
+  }
+
+  /*--------------Product Quantity Part---------------*/
+
+  ShowQuantityManage(id: any) {
+    this.product_quantity_modal.show();
+    this._product_Quantity_entity.ProductId = id;
+    this.GetSizeList();
+    this.GetColorList();
+
+    this.GetProductQuantityDetail(id);
+  }
+
+  GetProductQuantityDetail(id: any) {
+    var url = '/api/productQuantity/getall?productId=' + id + '&sizeId=' + this._sizeID + '&colorId=' + this._colorID + '';
+    this.dataSer.get(url).subscribe((res: any[]) => {
+      this._product_Quantities = res;
+    }, err => {
+      this.dataSer.handleError(err);
+    })
+  }
+
+  SaveProductQuantity(sizeId: any, colorId: any) {
+    this.dataSer.post('/api/productQuantity/add', this._product_Quantity_entity).subscribe((res: any) => {
+      this.GetProductQuantityDetail(this._product_Quantity_entity.ProductId);
+      this.notifySer.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
+    }, error => {
+      this.dataSer.handleError(error);
+    })
+  }
+
+  DeleteQuantity(productID: any, sizeId: any, colorId: any) {
+    this.notifySer.printConfirmDialog('Are you sure to delete this product quantity?', () => {
+      var params = { productId: productID, sizeId: sizeId, colorid: colorId };
+      this.dataSer.deleteWithMultiParams('/api/productQuantity/delete', params).subscribe((res: any) => {
+        this.GetProductQuantityDetail(productID);
+      }, erro => {
+        this.dataSer.handleError(erro);
+      })
+    });
+  }
+
+  GetColorList() {
+    this.dataSer.get('/api/productQuantity/getcolors').subscribe((res: any[]) => {
+      this._color_List = res;
+    }, err => {
+      this.dataSer.handleError(err);
+    })
+  }
+
+  GetSizeList() {
+    this.dataSer.get('/api/productQuantity/getsizes').subscribe((res: any[]) => {
+      this._size_List = res;
+    }, err => {
+      this.dataSer.handleError(err);
+    })
   }
 }
