@@ -95,6 +95,7 @@ export class UserComponent implements OnInit {
     this.dob = new Date(event.start._d).toDateString();
   }
 
+
   SaveData() {
     this.entity.Roles = this.myRoles;
     this.entity.BirthDay = moment(new Date(this.dob)).format('DD/MM/YYYY');
@@ -107,7 +108,6 @@ export class UserComponent implements OnInit {
         this.dataSer.handleError(error);
       });
     } else {
-      // this.entity.Roles = this.myRoles;
       this.dataSer.put('/api/appUser/update', this.entity).subscribe((res: any) => {
         this.userModal.hide();
         this.notifySer.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
@@ -118,7 +118,8 @@ export class UserComponent implements OnInit {
     }
   }
 
-  SaveChange(valid: boolean) {
+  SaveChange(valid: boolean, event: Event) {
+    event.preventDefault();
     if (valid) {
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {

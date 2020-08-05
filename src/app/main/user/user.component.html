@@ -95,7 +95,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="demo-form2" novalidate #addEditUser='ngForm' (ngSubmit)='SaveChange(addEditUser.valid)'
+                <form id="demo-form2" novalidate #addEditUser='ngForm' (ngSubmit)='SaveChange(addEditUser.valid,$event)'
                     *ngIf='entity' data-parsley-validate class="form-horizontal form-label-left">
                     <input type="hidden" [(ngModel)]='entity.Id' name="id">
                     <div class="form-group">

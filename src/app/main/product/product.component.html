@@ -6,10 +6,12 @@
     <div class="title_right">
         <div class="col-md-3 col-sm-5 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
-                <input type="text" class="form-control" (keyup)='OnKeyup($event)' name='filter' [(ngModel)]='keyword' name="keyword" placeholder="Search for...">
+                <input type="text" class="form-control" (keyup)='OnKeyup($event)' name='filter' [(ngModel)]='keyword'
+                    name="keyword" placeholder="Search for...">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" id="btnSearch" (click)='SearchProduct(keyword)' type="button">Go!</button>
-                </span>     
+                    <button class="btn btn-default" id="btnSearch" (click)='SearchProduct(keyword)'
+                        type="button">Go!</button>
+                </span>
             </div>
         </div>
 
@@ -28,7 +30,7 @@
 
 <div class="col-md-12 col-sm-12 col-xs-12">
     <button class="btn btn-primary pull-right" (click)='showAddEditModal()'>New Product</button>
-    <button class="btn btn-danger" type="button">Delete multiple product</button>
+    <button class="btn btn-danger" type="button" (click)='DeleteMulti()'>Delete multiple product</button>
     <div class="x_panel">
         <div class="x_title">
             <ul class="nav navbar-right panel_toolbox">
@@ -54,6 +56,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>#</th>
                         <th>Name</th>
                         <th>Category</th>
@@ -66,6 +69,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor='let product of products'>
+                        <th><input type="checkbox" [(ngModel)]='product.checked' name="checked"></th>
                         <th scope="row">{{product.ID}}</th>
                         <td>{{product.Name}}</td>
                         <td>{{product.ProductCategory.Name}}</td>
@@ -74,8 +78,13 @@
                         <td><img [src]='product.ThumbnailImage' width="30" height="30" /></td>
                         <td>{{product.CreatedDate|date:'dd/MM/yyyy'}}</td>
                         <td>
-                            <button class="btn btn-primary" (click)='GetProductDetail(product.ID)'><i class="fa fa-pencil-square-o"></i></button>
-                            <button class="btn btn-danger" (click)='DeleteProduct(product.ID)'><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-default" (click)='ShowImageManage(product.ID)'><i
+                                    class="fa fa-image"></i></button>
+                            <button class="btn btn-default"><i class="fa fa-calculator"></i></button>
+                            <button class="btn btn-primary" (click)='GetProductDetail(product.ID)'><i
+                                    class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-danger" (click)='DeleteProduct(product.ID)'><i
+                                    class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -92,7 +101,7 @@
 </div>
 
 
-<!--Modal add/edit role-->
+<!--Modal add/edit product-->
 <div bsModal #AddEditProduct="bs-modal" class="modal fade" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -104,7 +113,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="demo-form2" novalidate #FrmProduct='ngForm' (ngSubmit)='SaveChange(FrmProduct.valid)'
+                <form id="frm-product" novalidate #FrmProduct='ngForm' (ngSubmit)='SaveChange(FrmProduct.valid)'
                     data-parsley-validate class="form-horizontal form-label-left">
                     <input type="hidden" [(ngModel)]="entity.ID" name="id" />
                     <div role="tabpanel">
@@ -116,7 +125,6 @@
                         </ul>
 
                         <div class="tab-content">
-
                             <!--Base information about product-->
                             <h4>General Information</h4>
                             <div role="tabpanel" class="tab-pane active" id="general-info">
@@ -255,6 +263,81 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary save" [disabled]='FrmProduct.form.invalid'>Save
                             changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal manage product image-->
+<div bsModal #ProductImageManager="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="dialog-sizes-name1" class="modal-title pull-left">Product Image Manager</h4>
+                <button type="button" class="close pull-right" (click)="ProductImageManager.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frm-product-image" *ngIf='UploadImage' novalidate #FrmProductImage='ngForm'
+                    (ngSubmit)='SaveProductImage(FrmProductImage.valid)' data-parsley-validate
+                    class="form-horizontal form-label-left">
+                    <input type="hidden" [(ngModel)]='UploadImage.ProductId' name="productid">
+                    <div class="form-group">
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="first-name">Upload <span
+                                class="required"></span>
+                        </label>
+                        <div class="col-md-3 col-sm-3 col-xs-4">
+                            <input type="file" class="form-control col-md-7 col-xs-12" [(ngModel)]='UploadImage.Path'
+                                name="path" #path>
+                            <p class="help-block label label-danger"> Only support image type *.jpg, *.png,
+                                *.jpeg</p>
+                            <!-- <small [hidden]='name.valid ||(name.pristine && !addEditRole.submitted)' class="text-danger" >Role name must be over 3 words</small> -->
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="last-name">Description <span
+                                class="required"></span>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                            <input type="text" [(ngModel)]='UploadImage.Caption' name="caption" #caption='ngModel'
+                                class="form-control col-md-7 col-xs-12" placeholder="...">
+                            <!-- <small [hidden]='descript.valid ||(descript.pristine && !addEditRole.submitted)' class="text-danger" >Please enter valid description content</small> -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <table class="table table-bordered col-md-12 col-sm-12 col-xs-12">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Image</th>
+                                    <th>Description</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor='let img of productImgs'>
+                                    <td>{{img.ID}}</td>
+                                    <td><img [src]="img.Path" width="30" height="30"></td>
+                                    <td>{{img.Caption}}</td>
+                                    <td><button class="btn btn-danger" (click)='DeleteProductImg(img.ID)'>
+                                            <i class="fa fa-trash"></i>
+                                        </button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-9">
+                            <button (click)="ProductImageManager.hide()" class="btn btn-primary"
+                                type="button">Cancel</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserComponent } from './user.component';
 import {Routes, RouterModule} from '@angular/router';
-import {FormsModule} from '@angular/forms';
+import {FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
@@ -21,6 +21,7 @@ const userRoutes: Routes=[
     CommonModule,
     FormsModule,
     Daterangepicker,
+    ReactiveFormsModule,
     MultiselectDropdownModule,
     RouterModule.forChild(userRoutes),
     ModalModule.forRoot(),

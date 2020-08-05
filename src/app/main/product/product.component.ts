@@ -24,6 +24,14 @@ export class ProductComponent implements AfterViewInit, OnInit {
   public totalRow: any;
   public entity: any;
   public categories: any[];
+  public checkedList: any[];
+
+  /*--------------------Product image variable-----------------------------*/
+  public UploadImage: any;
+  public productId: any;
+  public productImgs: any[];
+  @ViewChild('ProductImageManager', { static: false }) product_image_modal: ModalDirective;
+  @ViewChild('path') selected_image;
 
   constructor(private dataSer: DataService,
     private notifySer: NotificationService,
@@ -38,6 +46,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
     this.GetProductCategoryList();
     this.LoadProducts();
     this.entity = {};
+    this.UploadImage = {};
   }
 
   showAddEditModal() {
@@ -139,5 +148,69 @@ export class ProductComponent implements AfterViewInit, OnInit {
     }
   }
 
+  DeleteMulti() {
+    this.checkedList = [];
+    for (let pr of this.products) {
+      if (pr.checked)
+        this.checkedList.push(pr.ID);
+    }
 
+    this.notifySer.printConfirmDialog('Are you sure to delete these products', () => {
+      this.dataSer.delete('/api/product/deletemulti', 'checkedProducts', JSON.stringify(this.checkedList)).subscribe((res: any) => {
+        this.notifySer.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
+        this.LoadProducts();
+      }, erro => {
+        this.dataSer.handleError(erro);
+      })
+    })
+  }
+
+  // Product Image part
+
+  ShowImageManage(id: any) {
+    this.product_image_modal.show();
+    this.UploadImage.ProductId = id;
+
+    this.LoadProductImgs(id);
+  }
+
+  LoadProductImgs(id: any) {
+    this.dataSer.get('/api/productImage/getall?productId=' + id).subscribe((res: any[]) => {
+      this.productImgs = res;
+    }, err => {
+      this.dataSer.handleError(err);
+    })
+  }
+
+
+  SaveProductImage(valid: boolean) {
+    if (valid) {
+      let imgFile = this.selected_image.nativeElement
+      if (imgFile.files.length > 0) {
+        this.uploadSer.postWithFile('/api/upload/SaveImage', null, imgFile.files).then((url: any) => {
+          this.UploadImage.Path = url;
+
+          this.dataSer.post('/api/productImage/add', JSON.stringify(this.UploadImage)).subscribe((res: any) => {
+            this.notifySer.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
+            this.LoadProductImgs(this.UploadImage.ProductId);
+          }, err => {
+            this.dataSer.handleError(err);
+          })
+        })
+      } else {
+        
+      }
+    }
+  }
+
+  DeleteProductImg(id: any) {
+    this.notifySer.printConfirmDialog('Delete this product image?', () => {
+      this.dataSer.delete('/api/productImage/delete', 'id', id).subscribe((res: any) => {
+        this.notifySer.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
+        this.LoadProductImgs(this.UploadImage.ProductId);
+      }, err => {
+        this.dataSer.handleError(err);
+      })
+    });
+  }
 }

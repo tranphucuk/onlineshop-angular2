@@ -52,6 +52,14 @@ export class DataService {
     return this._http.post(systemConstants.BASE_API + uri, data, { headers: newHeader }).pipe(map(this.extractData));
   }
 
+  // postFile(uri: string, data?: any) {
+  //   let newHeader = new Headers();
+  //   newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+  //   return this._http.post(systemConstants.BASE_API + uri, data, { headers: newHeader }).pipe(map(data => {
+  //     this.extractData;
+  //   }))
+  // }
+
   extractData(res: Response) {
     let body = res.json();
     return body || {};
