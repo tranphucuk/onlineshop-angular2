@@ -1,0 +1,162 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>BILL DETAILS</h3>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_content">
+
+            <div class="x_title">
+                <div class="col-md-4 col-sm-4 col-xs-12 form-group pull-right">
+                    <button class="btn btn-primary pull-right" type="button" routerLink='/main/bill'><i class="fa fa-minus"></i> Go
+                        Back</button>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <br>
+
+            <form id="add-form" #FrmBillDetail='ngForm' (ngSubmit)='SaveChanges()' novalidate data-parsley-validate
+                class="form-horizontal form-label-left">
+                <!-- <input type="hidden" [(ngModel)]='entity.Id' name="id"> -->
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Name <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <input readonly type="text" [(ngModel)]='_bill_entity.CustomerName' name="customerName"
+                            #customerName='ngModel' required minlength="3" maxlength="50"
+                            class="form-control col-md-7 col-xs-12">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Address <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <textarea readonly required rows="4" class="form-control" [(ngModel)]='_bill_entity.CustomerAddress'
+                            name="address" #address='ngModel'>
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Customer Message <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <textarea readonly required rows="4" class="form-control" [(ngModel)]='_bill_entity.CustomerMessage'
+                            name="customerMess" #customerMess='ngModel'>
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Email <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <input readonly type="email" [(ngModel)]='_bill_entity.CustomerEmail' name="customerMail"
+                            #customerMail='ngModel' [email]='true' required minlength="3" maxlength="30"
+                            class="form-control col-md-7 col-xs-12">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Mobile <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <input readonly type="text" [(ngModel)]='_bill_entity.CustomerMobile' name="mobile" #mobile='ngModel'
+                            required minlength="3" maxlength="20" class="form-control col-md-7 col-xs-12">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Payment Method <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <select disabled  class="form-control" [(ngModel)]='_bill_entity.PaymentMethod' name="paymentMethod"
+                            #paymentMethod='ngModel' required>
+                            <option [ngValue]="">--Payment method--</option>
+                            <option value="Cash">Cash on delivery</option>
+                            <option value="Bank">Bank transfer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Payment Status <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <select disabled class="form-control" [(ngModel)]='_bill_entity.PaymentStatus' name="paymentStatus"
+                            #paymentStatus='ngModel' required>
+                            <option [ngValue]="">--Payment status--</option>
+                            <option value="Not Paid">Not paid</option>
+                            <option value="Paid">Paid</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Bill Status <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <select class="form-control" [(ngModel)]='_bill_entity.Status' name="billStatus"
+                        #billStatus='ngModel' required>
+                            <option [ngValue]="">--Bill status--</option>
+                            <option value="false">In progress</option>
+                            <option value="true">Complete</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>             
+                <hr>
+
+                <table class="table table-striped" *ngIf='_bill_detail_list && _bill_detail_list.length>0'>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Quantity x Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let detail of _bill_detail_list'>
+                            <td>{{detail.Product.Name}}</td>
+                            <td>{{detail.Quantity}}</td>
+                            <td>{{detail.Price}}</td>
+                            <td>{{detail.Quantity * detail.Price}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Total: {{_total_bill}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="form-group">
+
+                    <div class="col-md-2 col-sm-2 col-xs-12  form-group pull-left">
+                        <button type="submit" class="btn btn-success pull-right">Save Bill</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

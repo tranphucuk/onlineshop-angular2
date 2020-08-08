@@ -25,7 +25,9 @@ export class UploadService {
       this.dataSer.postFile(url, formData).subscribe(res => {
         this.responseData = res;
         resolve(this.responseData);
-      }, error => this.dataSer.handleError(error));
+      }, error => {
+        this.dataSer.handleError(error)
+      });
     })
     return returnRes;
   }

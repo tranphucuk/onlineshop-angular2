@@ -16,6 +16,7 @@ import { SidebarMenuComponent } from '../../app/shared/sidebar/sidebar-menu/side
 import { TopbarMenuComponent } from '../shared/topbar/topbar-menu/topbar-menu.component'
 import { ProductCategoryModule } from './product-category/product-category.module'
 import { ProductModule } from './product/product.module'
+import {BillModule} from '../main/bill/bill.module'
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ProductModule } from './product/product.module'
     FunctionModule,
     ProductCategoryModule,
     ProductModule,
+    BillModule,
     RouterModule.forChild(mainRoutes),
   ]
 })

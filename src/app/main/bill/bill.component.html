@@ -1,0 +1,88 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>Bills <small>- order details</small></h3>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_content">
+
+            <div class="x_title">
+                <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                    <input type="text" [(ngModel)]='_startDate' name="startDate" daterangepicker (selected)='ChangeStartDate($event)' [options]="dateOptions" placeholder="From..." required class="form-control ">
+
+                </div>
+
+                <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                    <input type="text" [(ngModel)]='_endDate' name="endDate" daterangepicker (selected)='ChangeEndDate($event)' [options]="dateOptions" placeholder="To..." required class="form-control col-md-2 col-sm-2 col-xs-12">
+
+                </div>
+
+                <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                    <input type="text" placeholder="Customer name..." (keyup)='SearchEnter($event)' [(ngModel)]='_customerName' name="customerName" required class="form-control">
+                </div>
+
+                <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                    <select class="form-control col-md-2 col-sm-2 col-xs-12" [(ngModel)]='_paymentStatus' name="paymentStatus">
+                        <option>Paid</option>
+                        <option>Not Paid</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+                    <button class="btn btn-success pull-right" routerLink='/main/bill/add-new-bill'><i
+                            class="fa fa-plus"></i> Add New Bill</button>
+                    <button class="btn btn-default pull-right" (click)='ResetSearch()'>Reset search</button>
+                    <button class="btn btn-primary pull-right" (click)='LoadBills()'><i class="fa fa-search"></i> Search</button>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer Name</th>
+                        <th>Address</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Payment method</th>
+                        <th>Payment Status</th>
+                        <th>Status</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let order of _bill_list'>
+                        <td>{{order.ID}}</td>
+                        <td>{{order.CustomerName}}</td>
+                        <td>{{order.CustomerAddress}}</td>
+                        <td>{{order.CustomerEmail}}</td>
+                        <td>{{order.CustomerMobile}}</td>
+                        <td>{{order.PaymentMethod}}</td>
+                        <td>{{order.PaymentStatus}}</td>
+                        <td *ngIf='order.Status'><span class="label label-success" data-toggle="tooltip" title="Bill Details">Complete</span></td>
+                        <td *ngIf='!order.Status'><span class="label label-primary" data-toggle="tooltip" title="Delete Bill">In Progress</span> </td>
+                        <td>
+                            <button class="btn btn-primary" routerLink='/main/bill/bill-detail/{{order.ID}}'><i
+                                    class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div class="row">
+          <div class="col-xs-12 col-12">
+            <pagination class="pagination-sm" [boundaryLinks]="true" (pageChanged)="pageChanged($event)"
+              [itemsPerPage]='pageSize' [totalItems]='totalRow' [(ngModel)]='pageIndex' previousText='&lsaquo;'
+              nextText='&rsaquo;' firstText='&laquo;' lastText='&raquo;'></pagination>
+          </div>
+        </div> -->
+        </div>
+    </div>
+</div>

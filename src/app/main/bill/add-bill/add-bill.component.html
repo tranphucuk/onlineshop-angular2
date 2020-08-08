@@ -1,0 +1,278 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>ADD NEW BILL</h3>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_content">
+
+            <div class="x_title">
+                <div class="col-md-4 col-sm-4 col-xs-12 form-group pull-right">
+                    <button class="btn btn-primary pull-right" routerLink='/main/bill/index'><i class="fa fa-minus"></i> Go
+                        Back</button>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <br>
+
+            <form id="add-form" #FrmBill='ngForm' (ngSubmit)='SaveChanges()' novalidate data-parsley-validate
+                class="form-horizontal form-label-left">
+                <!-- <input type="hidden" [(ngModel)]='entity.Id' name="id"> -->
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Name <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <input type="text" [(ngModel)]='_bill_entity.CustomerName' name="customerName"
+                            #customerName='ngModel' required minlength="3" maxlength="50"
+                            class="form-control col-md-7 col-xs-12">
+                        <small [hidden]='customerName.valid' class="text-danger">Name
+                            must be over 3 words</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Address <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <textarea required rows="4" class="form-control" [(ngModel)]='_bill_entity.CustomerAddress'
+                            name="address" #address='ngModel'>
+
+                        </textarea>
+                        <small [hidden]='address.valid' class="text-danger">Please enter full
+                            address</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Customer Message <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <textarea required rows="4" class="form-control" [(ngModel)]='_bill_entity.CustomerMessage'
+                            name="customerMess" #customerMess='ngModel'>
+
+                        </textarea>
+                        <small [hidden]='customerMess.valid' class="text-danger">Please enter message for customer</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Email <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <input type="email" [(ngModel)]='_bill_entity.CustomerEmail' name="customerMail"
+                            #customerMail='ngModel' [email]='true' required minlength="3" maxlength="30"
+                            class="form-control col-md-7 col-xs-12">
+                        <small [hidden]='customerMail.valid' class="text-danger">Please enter
+                            valid email address</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Mobile <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <input type="text" [(ngModel)]='_bill_entity.CustomerMobile' name="mobile" #mobile='ngModel'
+                            required minlength="3" maxlength="20" class="form-control col-md-7 col-xs-12">
+                        <small [hidden]='mobile.valid' class="text-danger">please enter valid
+                            mobile number</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Payment Method <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <select  class="form-control" [(ngModel)]='_bill_entity.PaymentMethod' name="paymentMethod"
+                            #paymentMethod='ngModel' required>
+                            <option [ngValue]="">--Payment method--</option>
+                            <option value="Cash">Cash on delivery</option>
+                            <option value="Bank">Bank transfer</option>
+                        </select>
+                        <small [hidden]='paymentMethod.valid' class="text-danger">please select
+                            payment method</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Payment Status <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <select class="form-control" [(ngModel)]='_bill_entity.PaymentStatus' name="paymentStatus"
+                            #paymentStatus='ngModel' required>
+                            <option [ngValue]="">--Payment status--</option>
+                            <option value="Not Paid">Not paid</option>
+                            <option value="Paid">Paid</option>
+                        </select>
+                        <small [hidden]='paymentStatus.valid' class="text-danger">please select
+                            payment status</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Bill Status <span
+                            class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                        <select class="form-control" [(ngModel)]='_bill_entity.Status' name="billStatus"
+                        #billStatus='ngModel' required>
+                            <option [ngValue]="">--Bill status--</option>
+                            <option value="false">In progress</option>
+                            <option value="true">Complete</option>
+                        </select>
+                        <small [hidden]='billStatus.valid' class="text-danger">please select
+                            bill status</small>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 form-group pull-left">
+                        <button type="button" (click)='AddBillDetails()' class="btn btn-success pull-right"><i
+                                class="fa fa-plus"></i> Bill Details</button>
+                    </div>
+                </div>
+
+                <hr>
+
+                <table class="table table-striped" *ngIf='_bill_detail_list && _bill_detail_list.length>0'>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Quantity x Price</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let detail of _bill_detail_list'>
+                            <td>{{detail.Product.Name}}</td>
+                            <td>{{detail.Quantity}}</td>
+                            <td>{{detail.Price}}</td>
+                            <td>{{detail.Total}}</td>
+                            <td><button class="btn btn-xs btn-danger" (click)='DeleteBillDetail(detail)'><i
+                                        class="fa fa-trash"></i> Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="form-group">
+
+                    <div class="col-md-2 col-sm-2 col-xs-12  form-group pull-left">
+                        <button type="submit" [disabled]='!FrmBill.form.valid' class="btn btn-success pull-right">Save Bill</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Modal add/edit bill details-->
+<div bsModal #ModalBillDetails="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="dialog-sizes-name1" class="modal-title pull-left">Bill Details</h4>
+                <button type="button" class="close pull-right" (click)="ModalBillDetails.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="demo-form2" novalidate data-parsley-validate #frmBillDetail='ngForm'
+                    class="form-horizontal form-label-left">
+                    <!-- <input type="hidden" [(ngModel)]='entity.Id' name="id"> -->
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Product <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" required [(ngModel)]='_bill_detail_entity.ProductId'
+                                name="productId" #productId='ngModel'>
+                                <option value="">--Select product--</option>
+                                <option *ngFor='let pro of _products' [value]='pro.ID'>{{pro.Name}}</option>
+                            </select>
+                            <small [hidden]='productId.valid' class="text-danger">Please select product</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Color <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" required [(ngModel)]='_bill_detail_entity.ColorId'
+                                name="colorId" #colorId='ngModel'>
+                                <option value="">--Select color--</option>
+                                <option *ngFor='let color of _colors' [value]='color.ID'>{{color.Name}}</option>
+                            </select>
+                            <small [hidden]='colorId.valid' class="text-danger">Please select color</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Size <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" required [(ngModel)]='_bill_detail_entity.SizeId' name="sizeId"
+                                #sizeId='ngModel'>
+                                <option value="">--Select size--</option>
+                                <option *ngFor='let size of _sizes' [value]='size.ID'>{{size.Name}}</option>
+                            </select>
+                            <small [hidden]='sizeId.valid' class="text-danger">Please select size</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Quantity <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input class="form-control" required [(ngModel)]='_bill_detail_entity.Quantity'
+                                name="quantity" #quantity='ngModel' type="number" min="0">
+                            <small [hidden]='quantity.valid' class="text-danger">Please enter valid quantity
+                                number</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Price <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input class="form-control" required [(ngModel)]='_bill_detail_entity.Price' name="price"
+                                #price='ngModel' type="number" min="0">
+                            <small [hidden]='price.valid' class="text-danger">Please enter valid price</small>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button type="submit" class="btn btn-success" [disabled]='!frmBillDetail.valid'
+                                (click)='GrabBillDetailsValue()'>Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
