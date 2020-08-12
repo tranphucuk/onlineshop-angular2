@@ -37,6 +37,7 @@
     "nprogress": "^0.2.0",
     "rxjs": "~6.5.5",
     "rxjs-compat": "^6.6.0",
+    "signalr": "^2.4.1",
     "tinymce": "^5.4.1",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

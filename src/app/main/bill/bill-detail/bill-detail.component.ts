@@ -5,6 +5,7 @@ import { DataService } from '../../../core/services/data.service'
 import { UtilityService } from '../../../core/services/utility.service'
 import { NotificationService } from '../../../core/services/notification.service'
 import { MessageConstants } from '../../../core/services/common/message.constant';
+import { systemConstants } from 'src/app/core/services/common/system.constant';
 
 @Component({
   selector: 'app-bill-detail',
@@ -58,6 +59,15 @@ export class BillDetailComponent implements OnInit, OnDestroy {
     }, err => {
       this.dataSer.handleError(err);
     })
+  }
+
+  ExportExcel() {
+    this.dataSer.get('/api/Order/exportExcel/' + this._id).subscribe((res: any) => {
+      console.log(res);
+      window.open(systemConstants.BASE_API + res.Message);
+    }, err => {
+      this.dataSer.handleError(err);
+    });
   }
 
   ngOnDestroy(): void {

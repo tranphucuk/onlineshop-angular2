@@ -1,0 +1,107 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>Announcement Managemnent</h3>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_content">
+
+            <div class="x_title">           
+                <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+                    <input type="text" placeholder="Keyword..." required class="form-control">
+                </div>
+
+                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                    <button class="btn btn-success pull-right" (click)='ShowAnnModal()'><i
+                            class="fa fa-plus"></i> Add Announcement</button>
+                    <button class="btn btn-default pull-right" >Reset search</button>
+                    <button class="btn btn-primary pull-right" ><i class="fa fa-search"></i> Search</button>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Created Date</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let ann of _announcement_list'>
+                        <td>{{ann.ID}}</td>
+                        <td>{{ann.Title}}</td>
+                        <td>{{ann.Content}}</td>
+                        <td>{{ann.CreatedDate|date:'MM/dd/yyyy'}}</td>
+                        <td>
+                            <button class="btn btn-danger" (click)='DeleteAnn(ann.ID)'><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div class="row">
+          <div class="col-xs-12 col-12">
+            <pagination class="pagination-sm" [boundaryLinks]="true" (pageChanged)="pageChanged($event)"
+              [itemsPerPage]='pageSize' [totalItems]='totalRow' [(ngModel)]='pageIndex' previousText='&lsaquo;'
+              nextText='&rsaquo;' firstText='&laquo;' lastText='&raquo;'></pagination>
+          </div>
+        </div> -->
+        </div>
+    </div>
+</div>
+
+
+<!--Modal add announcement-->
+<div bsModal #AddAnnouncementModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Add Announcement</h4>
+        <button type="button" class="close pull-right" (click)="AddAnnouncementModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="demo-form2" #frmAnnouncement='ngForm' (ngSubmit)='SaveChanges(frmAnnouncement.valid)' novalidate data-parsley-validate class="form-horizontal form-label-left">
+          <!-- <input type="hidden" [(ngModel)]='entity.Id' name="id"> -->
+          <div class="form-group">
+            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Title <span
+                class="required">*</span>
+            </label>
+            <div class="col-md-8 col-sm-8 col-xs-12">
+              <input type="text" [(ngModel)]='_announcement.Title' name="annTitle" #annTitle='ngModel' required minlength="3" maxlength="50" class="form-control col-md-7 col-xs-12">
+              <small [hidden]='annTitle.valid' class="text-danger" >Title must be over 3 words and less than 50 words</small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="last-name">Content <span
+                class="required">*</span>
+            </label>
+            <div class="col-md-8 col-sm-8 col-xs-12">
+              <textarea rows="8" name="content" #content='ngModel' [(ngModel)]='_announcement.Content'  required='required' maxlength="500" minlength="6" class="form-control col-md-7 col-xs-12">
+              </textarea>
+              <small [hidden]='content.valid' class="text-danger" >Please enter valid content</small>
+            </div>
+          </div>
+          <div class="ln_solid"></div>
+          <div class="form-group">
+            <div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-2">
+              <button class="btn btn-primary" type="button" >Cancel</button>
+              <button type="submit" [disabled]='!frmAnnouncement.form.valid' class="btn btn-success">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,11 +12,14 @@
         <div class="x_content">
 
             <div class="x_title">
-                <div class="col-md-4 col-sm-4 col-xs-12 form-group pull-right">
+                <div class="col-md-1 col-sm-1 col-xs-12 form-group pull-right">
                     <button class="btn btn-primary pull-right" type="button" routerLink='/main/bill'><i class="fa fa-minus"></i> Go
                         Back</button>
                 </div>
 
+                <div class="col-md-1 col-sm-1 col-xs-12 form-group pull-right">
+                    <button class="btn btn-success pull-right" type="button" (click)='ExportExcel()'><i class="fa fa-office"></i>Export to Excel</button>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <br>

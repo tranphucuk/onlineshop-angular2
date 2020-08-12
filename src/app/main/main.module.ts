@@ -16,12 +16,13 @@ import { SidebarMenuComponent } from '../../app/shared/sidebar/sidebar-menu/side
 import { TopbarMenuComponent } from '../shared/topbar/topbar-menu/topbar-menu.component'
 import { ProductCategoryModule } from './product-category/product-category.module'
 import { ProductModule } from './product/product.module'
-import {BillModule} from '../main/bill/bill.module'
-
+import { BillModule } from '../main/bill/bill.module'
+import { AnnouncementModule } from './announcement/announcement.module'
+import { SignalrService } from '../core/services/signalr.service';
 
 @NgModule({
   declarations: [MainComponent, SidebarMenuComponent, TopbarMenuComponent],
-  providers: [UtilityService, AuthenService, DataService, MessageConstants],
+  providers: [UtilityService, AuthenService, DataService, SignalrService, MessageConstants],
   imports: [
     CommonModule,
     UserModule,
@@ -29,6 +30,7 @@ import {BillModule} from '../main/bill/bill.module'
     HttpModule,
     RoleModule,
     FunctionModule,
+    AnnouncementModule,
     ProductCategoryModule,
     ProductModule,
     BillModule,
